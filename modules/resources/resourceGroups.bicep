@@ -52,7 +52,7 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2019-05-01' = {
   properties: {}
 }
 
-module resourceGroup_lock '${bicepRegistry}/authorization/locks/resourcegroup:${moduleVerion}' = if (!empty(lock)) {
+module resourceGroup_lock 'br:biceps.azurecr.io/authorization/locks/resourcegroup:v0.6.0' = if (!empty(lock)) {
   name: '${uniqueString(deployment().name, location)}-${lock}-Lock'
   params: {
     level: any(lock)
@@ -62,14 +62,14 @@ module resourceGroup_lock '${bicepRegistry}/authorization/locks/resourcegroup:${
 }
 
 resource resourceGroup_roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for (roleAssignment, index) in roleAssignments: {
-  name: guid(resourceGroup.id, principalId, roleDefinitionIdOrName)
+  name: guid(resourceGroup.id, roleAssignment.principalId, roleAssignment.roleDefinitionIdOrName, index)
   properties: {
     description: contains(roleAssignment, 'description') ? roleAssignment.description : ''
     roleDefinitionId: contains(builtInRoleNames, roleAssignment.roleDefinitionIdOrName) ? builtInRoleNames[roleAssignment.roleDefinitionIdOrName] : roleAssignment.roleDefinitionIdOrName
     principalId: roleAssignment.principalId
     principalType: contains(roleAssignment, 'principalType') ? roleAssignment.principalType : null
     condition: contains(roleAssignment, 'condition') ? roleAssignment.condition : null
-    conditionVersion: !empty(condition) ? '2.0' : null
+    conditionVersion: contains(roleAssignment, 'condition') ? '2.0' : null
     delegatedManagedIdentityResourceId: contains(roleAssignment, 'delegatedManagedIdentityResourceId') ? roleAssignment.delegatedManagedIdentityResourceId : ''
   }
   scope: resourceGroup
