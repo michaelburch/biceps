@@ -22,7 +22,7 @@ jobs:
       # Azure login
       - uses: Azure/login@v1.1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
       # Publish to bicep registry
       - name: 'Publishing'
         uses: azure/CLI@v1
