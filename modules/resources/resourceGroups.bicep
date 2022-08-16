@@ -52,7 +52,7 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2019-05-01' = {
   properties: {}
 }
 
-module resourceGroup_lock 'br:biceps.azurecr.io/authorization/locks/resourcegroup:v0.6.0' = if (!empty(lock)) {
+module resourceGroup_lock 'br:biceps.azurecr.io/modules/authorization/locks/resourcegroup:v0.6.0' = if (!empty(lock)) {
   name: '${uniqueString(deployment().name, location)}-${lock}-Lock'
   params: {
     level: any(lock)
