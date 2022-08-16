@@ -30,4 +30,4 @@ jobs:
           azcliversion: 2.32.0
           inlineScript: |
             az bicep install
-            for filename in `ls modules/**/*.bicep`; do  az bicep publish --file $filename --target ${{env.REGISTRY_NAME}}/bicep/modules/`basename $filename .bicep | tr '[:upper:]' '[:lower:]'`:${{github.ref_name}}; done
+            for filename in `ls modules/**/*.bicep`; do  az bicep publish --file $filename --target ${{env.REGISTRY_NAME}}/modules/`basename $filename .bicep | tr '[:upper:]' '[:lower:]'`:${{github.ref_name}}; done
