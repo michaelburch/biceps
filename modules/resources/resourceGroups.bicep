@@ -62,7 +62,7 @@ module resourceGroup_lock 'br:biceps.azurecr.io/authorization/locks/resourcegrou
 }
 
 resource resourceGroup_roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for (roleAssignment, index) in roleAssignments: {
-  name: guid(resourceGroup.id, roleAssignment.principalId, roleAssignment.roleDefinitionIdOrName, index)
+  name: guid(last(split(roleAssignment.resourceId, '/')), roleAssignment.principalId, roleAssignment.roleDefinitionIdOrName)
   properties: {
     description: contains(roleAssignment, 'description') ? roleAssignment.description : ''
     roleDefinitionId: contains(builtInRoleNames, roleAssignment.roleDefinitionIdOrName) ? builtInRoleNames[roleAssignment.roleDefinitionIdOrName] : roleAssignment.roleDefinitionIdOrName
@@ -72,7 +72,6 @@ resource resourceGroup_roleAssignments 'Microsoft.Authorization/roleAssignments@
     conditionVersion: contains(roleAssignment, 'condition') ? '2.0' : null
     delegatedManagedIdentityResourceId: contains(roleAssignment, 'delegatedManagedIdentityResourceId') ? roleAssignment.delegatedManagedIdentityResourceId : ''
   }
-  scope: resourceGroup
 }]
 
 @description('The name of the resource group.')
