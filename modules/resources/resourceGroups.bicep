@@ -42,7 +42,7 @@ resource resourceGroup_roleAssignments 'Microsoft.Authorization/roleAssignments@
   name: guid(last(split(resourceGroup.id, '/')), roleAssignment.principalId, roleAssignment.roleDefinitionIdOrName)
   properties: {
     description: contains(roleAssignment, 'description') ? roleAssignment.description : null
-    roleDefinitionId: contains(builtInRoleNames, roleAssignment.roleDefinitionIdOrName) ? builtInRoleNames[roleAssignment.roleDefinitionIdOrName] : roleAssignment.roleDefinitionIdOrName
+    roleDefinitionId: contains(builtInRoleNames, roleAssignment.roleDefinitionIdOrName) ? builtInRoleNames['${roleAssignment.roleDefinitionIdOrName}'] : roleAssignment.roleDefinitionIdOrName
     principalId: roleAssignment.principalId
     principalType: contains(roleAssignment, 'principalType') ? roleAssignment.principalType : null
     condition: contains(roleAssignment, 'condition') ? roleAssignment.condition : null
