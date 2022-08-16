@@ -1,4 +1,4 @@
-name: 'Resources: ResourceGroups'
+name: 'Modules'
 
 on:
   workflow_dispatch:

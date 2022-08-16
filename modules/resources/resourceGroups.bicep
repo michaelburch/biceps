@@ -1,11 +1,5 @@
 targetScope = 'subscription'
 
-@description('Optional. Specify the bicep registry containing referenced modules')
-param bicepRegistry string = 'br:biceps.azurecr.io'
-
-@description('Optional. Specify the default version of referenced modules')
-param moduleVersion string = 'v0.6.0'
-
 @description('Required. The name of the Resource Group.')
 param name string
 
