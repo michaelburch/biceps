@@ -39,7 +39,7 @@ module resourceGroup_lock 'br:biceps.azurecr.io/modules/authorization/locks/reso
 }
 
 resource resourceGroup_roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for (roleAssignment, index) in roleAssignments: {
-  name: guid(last(split(roleAssignment.resourceId, '/')), roleAssignment.principalId, roleAssignment.roleDefinitionIdOrName)
+  name: guid(last(split(resourceGroup.id, '/')), roleAssignment.principalId, roleAssignment.roleDefinitionIdOrName)
   properties: {
     description: contains(roleAssignment, 'description') ? roleAssignment.description : ''
     roleDefinitionId: contains(builtInRoleNames, roleAssignment.roleDefinitionIdOrName) ? builtInRoleNames[roleAssignment.roleDefinitionIdOrName] : roleAssignment.roleDefinitionIdOrName
