@@ -30,4 +30,4 @@ jobs:
           azcliversion: 2.32.0
           inlineScript: |
             az bicep install
-            for filename in `find modules/ -depth -regex ".*\.bicep" -type f -not -path "*.bicep/*"`; do  az bicep publish --file $filename --target ${{env.REGISTRY_NAME}}/modules/`dirname $filename | tr '[:upper:]' '[:lower:]'`:${{github.ref_name}}; done
+            for filename in `find modules/ -depth -regex ".*\.bicep" -type f -not -path "*.bicep/*"`; do  az bicep publish --file $filename --target ${{env.REGISTRY_NAME}}/`dirname $filename | tr '[:upper:]' '[:lower:]'`:${{github.ref_name}}; done
