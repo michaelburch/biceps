@@ -20,7 +20,6 @@ param roleAssignments array = []
 @description('Optional. Tags of the storage account resource.')
 param tags object = {}
 
-var builtInRoleNames = json(loadTextContent('../../azure-roles.json'))
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2019-05-01' = {
   location: location
@@ -38,17 +37,16 @@ module resourceGroup_lock 'br:biceps.azurecr.io/modules/authorization/locks/reso
   scope: resourceGroup
 }
 
-resource resourceGroup_roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [for (roleAssignment, index) in roleAssignments: {
-  name: guid(last(split(resourceGroup.id, '/')), roleAssignment.principalId, roleAssignment.roleDefinitionIdOrName)
-  properties: {
-    description: contains(roleAssignment, 'description') ? roleAssignment.description : null
-    roleDefinitionId: contains(builtInRoleNames, roleAssignment.roleDefinitionIdOrName) ? subscriptionResourceId('Microsoft.Authorization/roleDefinitions', builtInRoleNames[roleAssignment.roleDefinitionIdOrName])  : subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleAssignment.roleDefinitionIdOrName)
-    principalId: roleAssignment.principalId
-    principalType: contains(roleAssignment, 'principalType') ? roleAssignment.principalType : null
-    condition: contains(roleAssignment, 'condition') ? roleAssignment.condition : null
-    conditionVersion: contains(roleAssignment, 'condition') ? '2.0' : null
-    delegatedManagedIdentityResourceId: contains(roleAssignment, 'delegatedManagedIdentityResourceId') ? roleAssignment.delegatedManagedIdentityResourceId : null
+module resourceGroup_roleAssignments '.bicep/nested_rbac.bicep' = [for (roleAssignment, index) in roleAssignments: {
+  name: '${uniqueString(deployment().name, location)}-RG-Rbac-${index}'
+  params: {
+    description: contains(roleAssignment, 'description') ? roleAssignment.description : ''
+    principalIds: roleAssignment.principalIds
+    principalType: contains(roleAssignment, 'principalType') ? roleAssignment.principalType : ''
+    roleDefinitionIdOrName: roleAssignment.roleDefinitionIdOrName
+    resourceId: resourceGroup.id
   }
+  scope: resourceGroup
 }]
 
 @description('The name of the resource group.')

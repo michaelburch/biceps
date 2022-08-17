@@ -16,8 +16,8 @@ module rg 'br:biceps.azurecr.io/modules/resourcegroups:v0.6.0' = {
     tags: tags
     roleAssignments: [
       {
-        roleDefinitionIdOrName: 'Contributor'
-        principalId: '43987329-6eb9-4ce9-b34e-d18c12b72e4f'
+        roleDefinitionIdOrName: 'AcrPull'
+        principalId: '835025d5-2679-4dec-b5f9-5d7c2a30811d'
       }
     ]
   }
