@@ -24,11 +24,17 @@ module vnet 'br:biceps.azurecr.io/modules/network/virtualnetworks:v0.6.0' = {
     name: '${spokeName}-vnet'
     addressPrefixes: [
       '192.168.64.0/24'
+      '192.168.65.0/24'
     ]
     subnets: [
       {
         name: 'pe-subnet'
         addressPrefix: '192.168.64.0/27'
+        privateEndpointNetworkPolicies: 'Enabled'
+      }
+      {
+        name: 'aks-subnet'
+        addressPrefix: '192.168.65.0/24'
         privateEndpointNetworkPolicies: 'Enabled'
       }
     ]
@@ -50,4 +56,8 @@ module kv 'br:biceps.azurecr.io/modules/keyvault/vaults:v0.6.0' = {
       }
     ]
   }
+}
+
+module acr 'br:biceps.azurecr.io/modules/containerregistry/registries:v0.6.0' = {
+  
 }
