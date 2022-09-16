@@ -59,5 +59,18 @@ module kv 'br:biceps.azurecr.io/modules/keyvault/vaults:v0.6.0' = {
 }
 
 module acr 'br:biceps.azurecr.io/modules/containerregistry/registries:v0.6.0' = {
-  
+  name: '${spokeName}-acr'
+  scope: resourceGroup(rg.name)
+  params: {
+    name: '${spokeName}acr'
+    publicNetworkAccess: 'Disabled'
+    acrSku: 'Premium'
+    privateEndpoints: [
+      {
+        service: 'registry'
+        subnetResourceId: vnet.outputs.subnetResourceIds[0]
+        tags: tags
+      }
+    ]
+  }
 }
