@@ -21,6 +21,13 @@ param userAssignedIdentities object = {}
 ])
 param aksClusterNetworkPlugin string = ''
 
+@description('Optional. Specifies if CNI overlay mode should be use')
+@allowed([
+  ''
+  'Overlay'
+])
+param aksClusterNetworkPluginMode string = ''
+
 @description('Optional. Specifies the network policy used for building Kubernetes network. - calico or azure.')
 @allowed([
   ''
@@ -367,7 +374,7 @@ var lbProfile = {
   effectiveOutboundIPs: []
 }
 
-resource managedCluster 'Microsoft.ContainerService/managedClusters@2022-06-01' = {
+resource managedCluster 'Microsoft.ContainerService/managedClusters@2022-07-02-preview' = {
   name: name
   location: location
   tags: tags
@@ -428,6 +435,7 @@ resource managedCluster 'Microsoft.ContainerService/managedClusters@2022-06-01' 
     enablePodSecurityPolicy: enablePodSecurityPolicy
     networkProfile: {
       networkPlugin: !empty(aksClusterNetworkPlugin) ? any(aksClusterNetworkPlugin) : null
+      networkPluginMode: !empty(aksClusterNetworkPluginMode) ? any(aksClusterNetworkPluginMode) : null
       networkPolicy: !empty(aksClusterNetworkPolicy) ? any(aksClusterNetworkPolicy) : null
       podCidr: !empty(aksClusterPodCidr) ? aksClusterPodCidr : null
       serviceCidr: !empty(aksClusterServiceCidr) ? aksClusterServiceCidr : null
