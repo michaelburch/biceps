@@ -38,25 +38,9 @@ param conditionVersion string = '2.0'
 ])
 param principalType string = ''
 
-@sys.description('Optional. Enable telemetry via the Customer Usage Attribution ID (GUID).')
-param enableDefaultTelemetry bool = true
-
 var builtInRoleNames = json(loadTextContent('../../../../azure-roles.json'))
 
-resource defaultTelemetry 'Microsoft.Resources/deployments@2021-04-01' = if (enableDefaultTelemetry) {
-  name: 'pid-47ed15a6-730a-4827-bcb4-0fd963ffbd82-${uniqueString(deployment().name, location)}'
-  location: location
-  properties: {
-    mode: 'Incremental'
-    template: {
-      '$schema': 'https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#'
-      contentVersion: '1.0.0.0'
-      resources: []
-    }
-  }
-}
-
-var roleDefinitionId_var = (contains(builtInRoleNames, roleDefinitionIdOrName) ? builtInRoleNames[roleDefinitionIdOrName] : roleDefinitionIdOrName)
+var roleDefinitionId_var = contains(builtInRoleNames, roleDefinitionIdOrName) ? subscriptionResourceId('Microsoft.Authorization/roleDefinitions',builtInRoleNames[roleDefinitionIdOrName]): roleDefinitionIdOrName
 
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(subscriptionId, roleDefinitionId_var, principalId)
