@@ -130,6 +130,9 @@ param enablePrivateClusterPublicFQDN bool = false
 @description('Optional. If AKS will create a Private DNS Zone in the Node Resource Group.')
 param usePrivateDNSZone bool = false
 
+@description('Optional. Resource ID of the Private DNS Zone to use. See https://learn.microsoft.com/en-us/azure/aks/private-clusters#create-a-private-aks-cluster-with-custom-private-dns-zone-or-private-dns-subzone')
+param customPrivateDNSZoneId string = ''
+
 @description('Required. Properties of the primary agent pool.')
 param primaryAgentPoolProfile array
 
@@ -478,7 +481,7 @@ resource managedCluster 'Microsoft.ContainerService/managedClusters@2022-07-02-p
       disableRunCommand: disableRunCommand
       enablePrivateCluster: enablePrivateCluster
       enablePrivateClusterPublicFQDN: enablePrivateClusterPublicFQDN
-      privateDNSZone: usePrivateDNSZone ? 'system' : ''
+      privateDNSZone: usePrivateDNSZone ? 'system' : customPrivateDNSZoneId
     }
     podIdentityProfile: {
       allowNetworkPluginKubenet: podIdentityProfileAllowNetworkPluginKubenet
