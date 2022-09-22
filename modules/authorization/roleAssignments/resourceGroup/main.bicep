@@ -41,7 +41,7 @@ param principalType string = ''
 
 var builtInRoleNames = json(loadTextContent('../../../../azure-roles.json'))
 
-var roleDefinitionId_var = contains(builtInRoleNames, roleDefinitionIdOrName) ? subscriptionResourceId('Microsoft.Authorization/roleDefinitions',builtInRoleNames[roleDefinitionIdOrName]): roleDefinitionIdOrName
+var roleDefinitionId_var = contains(builtInRoleNames, roleDefinitionIdOrName) ? az.resourceId('Microsoft.Authorization/roleDefinitions',builtInRoleNames[roleDefinitionIdOrName]): roleDefinitionIdOrName
 
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(subscriptionId, resourceGroupName, roleDefinitionId_var, principalId)
