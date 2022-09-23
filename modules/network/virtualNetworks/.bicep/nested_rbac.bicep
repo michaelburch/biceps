@@ -43,7 +43,7 @@ resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   name: guid(virtualNetwork.id, principalId, roleDefinitionIdOrName)
   properties: {
     description: description
-    roleDefinitionId: contains(builtInRoleNames, roleDefinitionIdOrName) ? builtInRoleNames[roleDefinitionIdOrName] : roleDefinitionIdOrName
+    roleDefinitionId: contains(builtInRoleNames, roleDefinitionIdOrName) ? az.resourceId('Microsoft.Authorization/roleDefinitions',builtInRoleNames[roleDefinitionIdOrName]) : roleDefinitionIdOrName
     principalId: principalId
     principalType: !empty(principalType) ? any(principalType) : null
     condition: !empty(condition) ? condition : null

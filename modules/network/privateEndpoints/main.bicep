@@ -99,3 +99,4 @@ output name string = privateEndpoint.name
 
 @description('The location the resource was deployed into.')
 output location string = privateEndpoint.location
+
