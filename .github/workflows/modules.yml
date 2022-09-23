@@ -2,6 +2,12 @@ name: 'Modules'
 
 on:
   workflow_dispatch:
+  push:
+    paths-ignore:
+      - '.github/**/*'
+    branches:
+      - 'main'
+      - 'v0.6.0'
 
 env:
   AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
