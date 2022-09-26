@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'modules/'
+      - 'modules/**'
     branches:
       - 'main'
       - 'v0.6.0'
