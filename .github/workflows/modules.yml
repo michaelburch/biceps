@@ -3,8 +3,8 @@ name: 'Modules'
 on:
   workflow_dispatch:
   push:
-    paths-ignore:
-      - '.github/**/*'
+    paths:
+      - 'modules/'
     branches:
       - 'main'
       - 'v0.6.0'
