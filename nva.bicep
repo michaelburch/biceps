@@ -91,12 +91,12 @@ module nva 'modules/compute/virtualMachines/main.bicep' = {
       }
     }
     extensionCustomScriptConfig: {
-      // FreeBSD is not supported for CustomScriptExtension versions greater than 1.5
+      // FreeBSD is not supported for CustomScriptExtension versions greater than 1.x
       // https://learn.microsoft.com/en-us/azure/virtual-machines/linux/freebsd-intro-on-azure
       enabled: true
       publisher: 'Microsoft.OSTCExtensions'
       type: 'CustomScriptForLinux'
-      typeHandlerVersion: '1.5'
+      typeHandlerVersion: '1.5.5'
       autoUpgradeMinorVersion: false
       fileData: [
         {
