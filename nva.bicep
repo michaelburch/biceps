@@ -34,7 +34,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' existing = {
   scope: targetResourceGroup
 }
 
-module nva 'modules/compute/virtualMachines/main.bicep' = {
+module nva 'br:biceps.azurecr.io/modules/compute/virtualmachines:latest' = {
   name: 'vm-nva-${spokeName}-${subscriptionType}'
   scope: targetResourceGroup
   params: {
@@ -44,10 +44,10 @@ module nva 'modules/compute/virtualMachines/main.bicep' = {
     encryptionAtHost: false
     disablePasswordAuthentication: empty(adminPassword)
     bootDiagnostics: true
-    publicKeys: [
+    publicKeys: !empty(adminPubKey) ? [
       { keyData: adminPubKey
-        path: '/home/michael/.ssh/authorized_keys' }
-    ]
+        path: '/home/${adminUser}/.ssh/authorized_keys' }
+    ] : []
     location: targetLocation
     imageReference: {
       publisher: 'thefreebsdfoundation'
@@ -96,8 +96,8 @@ module nva 'modules/compute/virtualMachines/main.bicep' = {
       enabled: true
       publisher: 'Microsoft.OSTCExtensions'
       type: 'CustomScriptForLinux'
-      typeHandlerVersion: '1.5.5'
-      autoUpgradeMinorVersion: false
+      typeHandlerVersion: '1.5'
+      autoUpgradeMinorVersion: true
       fileData: [
         {
           uri: 'https://raw.githubusercontent.com/michaelburch/azure-opnsense/main/install-opnsense.sh'
