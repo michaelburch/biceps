@@ -617,7 +617,7 @@ module vm_diskEncryptionExtension 'extensions/main.bicep' = if (extensionDiskEnc
   ]
 }
 
-module vm_backup '../../recoveryServices/vaults/protectionContainers/protectedItems/main.bicep' = if (!empty(backupVaultName)) {
+module vm_backup '../../recoveryservices/vaults/protectionContainers/protectedItems/main.bicep' = if (!empty(backupVaultName)) {
   name: '${uniqueString(deployment().name, location)}-VM-Backup'
   params: {
     name: 'vm;iaasvmcontainerv2;${resourceGroup().name};${vm.name}'
