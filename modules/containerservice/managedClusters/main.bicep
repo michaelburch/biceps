@@ -262,6 +262,9 @@ param enableOidcIssuerProfile bool = false
 @description('Optional. Whether to enable Azure Defender.')
 param enableAzureDefender bool = false
 
+@description('Optional. Whether to enable Workload Identity')
+param enableWorkloadIdentity bool = false
+
 @description('Optional. Whether to enable Kubernetes pod security policy.')
 param enablePodSecurityPolicy bool = false
 
@@ -503,12 +506,15 @@ resource managedCluster 'Microsoft.ContainerService/managedClusters@2022-07-02-p
                 objectId: kubeletIdentity.properties.principalId
             }
         } : null
-    securityProfile: enableAzureDefender ? {
-      azureDefender: {
+    securityProfile: {
+      workloadIdentity: {
+        enabled: enableWorkloadIdentity
+      }
+      defender: enableAzureDefender ? {
         enabled: enableAzureDefender
         logAnalyticsWorkspaceResourceId: !empty(monitoringWorkspaceId) ? monitoringWorkspaceId : null
-      }
-    } : null
+      } : null
+    }
   }
 }
 
