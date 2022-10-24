@@ -258,7 +258,7 @@ module registry_replications 'replications/main.bicep' = [for (replication, inde
 }]
 
 module registry_agentpools 'agentPools/main.bicep' = [for (agentpool, index) in agentPools: {
-  name: '${uniqueString(deployment().name, location)}-Registry-Replication-${index}'
+  name: '${uniqueString(deployment().name, location)}-Registry-AgentPool-${index}'
   params: {
     name: agentpool.name
     registryName: registry.name
