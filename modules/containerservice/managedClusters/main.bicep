@@ -241,6 +241,9 @@ param autoScalerProfileSkipNodesWithLocalStorage string = 'true'
 @description('Optional. Specifies if nodes with system pods should be skipped for the auto-scaler of the AKS cluster.')
 param autoScalerProfileSkipNodesWithSystemPods string = 'true'
 
+@description('Optional. The name of an existing kubelet identity to use in the cluster.')
+param kubeletIdentityName string = ''
+
 @description('Optional. Running in Kubenet is disabled by default due to the security related nature of AAD Pod Identity and the risks of IP spoofing.')
 param podIdentityProfileAllowNetworkPluginKubenet bool = false
 
@@ -377,6 +380,10 @@ var lbProfile = {
   effectiveOutboundIPs: []
 }
 
+resource kubeletIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview'  existing = if (!empty(kubeletIdentityName)) {
+  name: kubeletIdentityName
+}
+
 resource managedCluster 'Microsoft.ContainerService/managedClusters@2022-07-02-preview' = {
   name: name
   location: location
@@ -489,6 +496,13 @@ resource managedCluster 'Microsoft.ContainerService/managedClusters@2022-07-02-p
       userAssignedIdentities: podIdentityProfileUserAssignedIdentities
       userAssignedIdentityExceptions: podIdentityProfileUserAssignedIdentityExceptions
     }
+    identityProfile: !empty(kubeletIdentity) ? {
+            kubeletidentity: {
+                resourceId: kubeletIdentity.id
+                clientId: kubeletIdentity.properties.clientId
+                objectId: kubeletIdentity.properties.principalId
+            }
+        } : null
     securityProfile: enableAzureDefender ? {
       azureDefender: {
         enabled: enableAzureDefender
