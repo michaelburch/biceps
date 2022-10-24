@@ -92,6 +92,9 @@ param zoneRedundancy string = 'Disabled'
 @description('Optional. All replications to create.')
 param replications array = []
 
+@description('Optional. All agent pools to create.')
+param agentPools array = []
+
 @description('Optional. All webhooks to create.')
 param webhooks array = []
 
@@ -251,6 +254,20 @@ module registry_replications 'replications/main.bicep' = [for (replication, inde
     regionEndpointEnabled: contains(replication, 'regionEndpointEnabled') ? replication.regionEndpointEnabled : true
     zoneRedundancy: contains(replication, 'zoneRedundancy') ? replication.zoneRedundancy : 'Disabled'
     tags: contains(replication, 'tags') ? replication.tags : {}
+  }
+}]
+
+module registry_agentpools 'agentPools/main.bicep' = [for (agentpool, index) in agentPools: {
+  name: '${uniqueString(deployment().name, location)}-Registry-Replication-${index}'
+  params: {
+    name: agentpool.name
+    registryName: registry.name
+    location: agentpool.location
+    osType: contains(agentpool, 'osType') ? agentpool.osType : null
+    count: contains(agentpool, 'count') ? agentpool.count : null
+    tier: contains(agentpool, 'tier') ? agentpool.tier : null
+    vnetSubnetId: contains(agentpool, 'vnetSubnetId') ? agentpool.vnetSubnetId : null
+    tags: contains(agentpool, 'tags') ? agentpool.tags : {}
   }
 }]
 
