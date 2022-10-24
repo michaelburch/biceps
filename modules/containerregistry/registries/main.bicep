@@ -263,9 +263,9 @@ module registry_agentpools 'agentPools/main.bicep' = [for (agentpool, index) in 
     name: agentpool.name
     registryName: registry.name
     location: contains(agentpool, 'location') ? agentpool.location : registry.location
-    osType: contains(agentpool, 'osType') ? agentpool.osType : null
-    count: contains(agentpool, 'count') ? agentpool.count : null
-    tier: contains(agentpool, 'tier') ? agentpool.tier : null
+    osType: contains(agentpool, 'osType') ? agentpool.osType : ''
+    count: contains(agentpool, 'count') ? agentpool.count : ''
+    tier: contains(agentpool, 'tier') ? agentpool.tier : ''
     vnetSubnetId: contains(agentpool, 'vnetSubnetId') ? agentpool.vnetSubnetId : null
     tags: contains(agentpool, 'tags') ? agentpool.tags : {}
   }
