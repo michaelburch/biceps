@@ -10,9 +10,9 @@ param location string = resourceGroup().location
 @description('Optional. Tags of the resource.')
 param tags object = {}
 
-@description('Optional. Desired Number of agents (VMs) specified for the pool. The default value is 0.')
+@description('Optional. Desired Number of agents (VMs) specified for the pool. The default value is 1.')
 @minValue(0)
-param count int = 0
+param count int = 1
 
 @description('Optional. The operating system type. The default is Linux.')
 @allowed([
