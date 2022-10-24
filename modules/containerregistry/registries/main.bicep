@@ -262,7 +262,7 @@ module registry_agentpools 'agentPools/main.bicep' = [for (agentpool, index) in 
   params: {
     name: agentpool.name
     registryName: registry.name
-    location: agentpool.location
+    location: contains(agentpool, 'location') ? agentpool.location : registry.location
     osType: contains(agentpool, 'osType') ? agentpool.osType : null
     count: contains(agentpool, 'count') ? agentpool.count : null
     tier: contains(agentpool, 'tier') ? agentpool.tier : null
