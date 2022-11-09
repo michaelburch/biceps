@@ -37,7 +37,7 @@ module resourceGroup_lock 'br:biceps.azurecr.io/modules/authorization/locks/reso
   scope: resourceGroup
 }
 
-module resourceGroup_roleAssignments '.bicep/nested_rbac.bicep' = [for (roleAssignment, index) in roleAssignments: {
+module resourceGroup_roleAssignments 'roleassignments/main.bicep' = [for (roleAssignment, index) in roleAssignments: {
   name: '${uniqueString(deployment().name, location)}-RG-Rbac-${index}'
   params: {
     description: contains(roleAssignment, 'description') ? roleAssignment.description : ''
