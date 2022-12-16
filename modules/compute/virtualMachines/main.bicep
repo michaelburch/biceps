@@ -276,6 +276,9 @@ param provisionVMAgent bool = true
 @description('Optional. Indicates whether Automatic Updates is enabled for the Windows virtual machine. Default value is true. For virtual machine scale sets, this property can be updated and updates will take effect on OS reprovisioning.')
 param enableAutomaticUpdates bool = true
 
+@description('Optional. Indicates whether Automatic Updates is enabled for the Windows virtual machine. Default value is true. For virtual machine scale sets, this property can be updated and updates will take effect on OS reprovisioning.')
+param enableVulnerabilityAssessment bool = false
+
 @description('Optional. Specifies the time zone of the virtual machine. e.g. \'Pacific Standard Time\'. Possible values can be `TimeZoneInfo.id` value from time zones returned by `TimeZoneInfo.GetSystemTimeZones`.')
 param timeZone string = ''
 
@@ -463,6 +466,11 @@ resource vm_configurationProfileAssignment 'Microsoft.Automanage/configurationPr
     configurationProfile: configurationProfile
   }
   scope: vm
+}
+
+resource vm_serverVulnerabilityAssessment 'Microsoft.Security/serverVulnerabilityAssessments@2020-01-01' = if(enableVulnerabilityAssessment) {
+  scope: vm
+  name: 'default'
 }
 
 module vm_domainJoinExtension 'extensions/main.bicep' = if (extensionDomainJoinConfig.enabled) {
